@@ -14,12 +14,12 @@ class ByteField(Field):
         super(ByteField, self).__init__(*args, **kwargs)
         self.validators.append(validators.MaxLengthValidator(self.max_length))
 
-    def to_python(self, value):
+    def from_db_value(self, value, expression, connection, context):
         if value is None:
             return None
         return binascii.hexlify(value)
 
-    def get_prep_value(value, connection):
+    def get_prep_value(self, value):
         if value is None:
             return None
         return binascii.unhexlify(value)
